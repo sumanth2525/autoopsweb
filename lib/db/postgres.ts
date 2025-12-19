@@ -17,7 +17,16 @@ export class PostgreSQLConnection implements DatabaseConnection {
   async connect(): Promise<void> {
     try {
       // Dynamic import to avoid errors if pg is not installed
-      const { Client } = await import('pg');
+      let Client: any;
+      try {
+        const pgModule = await import('pg');
+        Client = pgModule.Client;
+      } catch (importError: any) {
+        if (importError.code === 'MODULE_NOT_FOUND') {
+          throw new Error('PostgreSQL package not installed. Run: npm install pg');
+        }
+        throw importError;
+      }
       
       if (this.config.url) {
         this.client = new Client({ connectionString: this.config.url });

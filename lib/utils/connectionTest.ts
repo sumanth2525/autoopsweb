@@ -177,15 +177,29 @@ export async function testDatabase(): Promise<ConnectionStatus> {
         connected = await db.testConnection();
         await db.disconnect();
       } else if (config.type === 'mongodb') {
-        const { MongoDBConnection } = await import('@/lib/db/mongodb');
-        const db = new MongoDBConnection(config);
-        connected = await db.testConnection();
-        await db.disconnect();
+        try {
+          const { MongoDBConnection } = await import('@/lib/db/mongodb');
+          const db = new MongoDBConnection(config);
+          connected = await db.testConnection();
+          await db.disconnect();
+        } catch (mongodbError: any) {
+          if (mongodbError.message?.includes('not installed')) {
+            throw mongodbError;
+          }
+          throw mongodbError;
+        }
       } else if (config.type === 'sqlite') {
-        const { SQLiteConnection } = await import('@/lib/db/sqlite');
-        const db = new SQLiteConnection(config);
-        connected = await db.testConnection();
-        await db.disconnect();
+        try {
+          const { SQLiteConnection } = await import('@/lib/db/sqlite');
+          const db = new SQLiteConnection(config);
+          connected = await db.testConnection();
+          await db.disconnect();
+        } catch (sqliteError: any) {
+          if (sqliteError.message?.includes('not installed')) {
+            throw sqliteError;
+          }
+          throw sqliteError;
+        }
       }
     } catch (dbError: any) {
       const responseTime = Date.now() - startTime;

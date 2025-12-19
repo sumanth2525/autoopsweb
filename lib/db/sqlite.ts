@@ -21,28 +21,39 @@ export class SQLiteConnection implements DatabaseConnection {
       
       // Try better-sqlite3 first (synchronous, faster)
       try {
-        const Database = (await import('better-sqlite3')).default;
+        const betterSqlite3Module = await import('better-sqlite3');
+        const Database = betterSqlite3Module.default;
         this.db = new Database(dbPath);
         this.status = 'connected';
         console.log('✅ SQLite connected successfully');
         return;
-      } catch (e) {
-        // Fallback to sqlite3 (asynchronous)
-        const sqlite3 = await import('sqlite3');
-        const { promisify } = await import('util');
-        
-        return new Promise((resolve, reject) => {
-          this.db = new sqlite3.Database(dbPath, (err: Error | null) => {
-            if (err) {
-              this.status = 'error';
-              reject(new Error(`SQLite connection failed: ${err.message}`));
-            } else {
-              this.status = 'connected';
-              console.log('✅ SQLite connected successfully');
-              resolve();
+      } catch (e: any) {
+        // If better-sqlite3 not found, try sqlite3
+        if (e.code === 'MODULE_NOT_FOUND') {
+          try {
+            const sqlite3 = await import('sqlite3');
+            const { promisify } = await import('util');
+            
+            return new Promise((resolve, reject) => {
+              this.db = new sqlite3.Database(dbPath, (err: Error | null) => {
+                if (err) {
+                  this.status = 'error';
+                  reject(new Error(`SQLite connection failed: ${err.message}`));
+                } else {
+                  this.status = 'connected';
+                  console.log('✅ SQLite connected successfully');
+                  resolve();
+                }
+              });
+            });
+          } catch (sqlite3Error: any) {
+            if (sqlite3Error.code === 'MODULE_NOT_FOUND') {
+              throw new Error('SQLite package not installed. Run: npm install better-sqlite3 or npm install sqlite3');
             }
-          });
-        });
+            throw sqlite3Error;
+          }
+        }
+        throw e;
       }
     } catch (error: any) {
       this.status = 'error';

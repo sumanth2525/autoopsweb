@@ -20,7 +20,7 @@ export default function TestConnectionsPage() {
     } catch (error) {
       console.error('Failed to run tests:', error);
       setTestResults({
-        overall: 'error',
+        overall: 'down',
         services: [],
         timestamp: new Date().toISOString(),
       });
@@ -172,7 +172,7 @@ export default function TestConnectionsPage() {
             <li>• <strong>Database:</strong> Database connection testing (ready for future implementation)</li>
           </ul>
           <p className="mt-4 text-xs text-blue-700">
-            All tests include response time measurements. Click "View Details" on any card to see additional information.
+            All tests include response time measurements. Click &quot;View Details&quot; on any card to see additional information.
           </p>
         </div>
       </div>

@@ -17,7 +17,16 @@ export class MongoDBConnection implements DatabaseConnection {
   async connect(): Promise<void> {
     try {
       // Dynamic import to avoid errors if mongodb is not installed
-      const { MongoClient } = await import('mongodb');
+      let MongoClient: any;
+      try {
+        const mongodbModule = await import('mongodb');
+        MongoClient = mongodbModule.MongoClient;
+      } catch (importError: any) {
+        if (importError.code === 'MODULE_NOT_FOUND') {
+          throw new Error('MongoDB package not installed. Run: npm install mongodb');
+        }
+        throw importError;
+      }
       
       const uri = this.config.url || 
         `mongodb://${this.config.host || 'localhost'}:${this.config.port || 27017}/${this.config.database || 'crime_analytics'}`;
