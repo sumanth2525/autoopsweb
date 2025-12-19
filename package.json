@@ -1,0 +1,42 @@
+{
+  "name": "crime-analytics-dashboard",
+  "version": "1.0.0",
+  "description": "A comprehensive crime analytics dashboard using FBI crime statistics API",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:3001": "next dev -p 3001",
+    "dev:3002": "next dev -p 3002",
+    "dev:8080": "next dev -p 8080",
+    "dev:custom": "next dev -p",
+    "build": "next build",
+    "start": "next start",
+    "start:3001": "next start -p 3001",
+    "start:3002": "next start -p 3002",
+    "start:8080": "next start -p 8080",
+    "lint": "next lint",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel"
+  },
+  "dependencies": {
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "axios": "^1.6.2",
+    "recharts": "^2.10.3",
+    "date-fns": "^2.30.0",
+    "lucide-react": "^0.294.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "typescript": "^5.3.3",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.4",
+    "tailwindcss": "^3.3.6",
+    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.16"
+  }
+}
+

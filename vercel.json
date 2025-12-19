@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "FBI_API_KEY": "@fbi_api_key",
+    "NEXT_PUBLIC_FBI_API_BASE_URL": "@fbi_api_base_url"
+  }
+}
+
